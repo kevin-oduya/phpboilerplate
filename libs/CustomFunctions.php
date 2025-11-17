@@ -26,6 +26,29 @@ class CustomFunctions {
             $text
         );
     }
+	
+    public static function formatPhone(string $phone): string {
+        // Remove any spaces or hyphens first
+        $digits = preg_replace('/\D+/', '', $phone);
+    
+        // Ensure it starts with +254
+        if (strpos($phone, '+') === 0) {
+            $digits = '+' . $digits;
+        }
+    
+        // Example: +254712345678  →  +254 712 345 678
+        if (preg_match('/^\+254(\d{3})(\d{3})(\d{3})$/', $digits, $m)) {
+            return "+254 {$m[1]} {$m[2]} {$m[3]}";
+        }
+    
+        // If it's 07XXXXXXXX  →  07X XXX XXX
+        if (preg_match('/^0(\d{3})(\d{3})(\d{3})$/', $digits, $m)) {
+            return "0{$m[1]} {$m[2]} {$m[3]}";
+        }
+    
+        // If pattern didn't match, return raw
+        return $phone;
+    }
     public static function isSafeIdentifier(string $name): bool {
         // 1. Must be valid UTF-8
         if (!mb_check_encoding($name, 'UTF-8')) {
@@ -462,4 +485,5 @@ class CustomFunctions {
     //end of class
     
 }
+
 
