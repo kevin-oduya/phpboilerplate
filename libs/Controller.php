@@ -26,7 +26,8 @@ class Controller {
 		$this->view->version = CODE_VERSION;
 		$this->view->_content = $this->model->_content(); 
 		$this->view->currentpage = 0;
-		$this->view->pid = ''; 
+		$this->view->pid = '';  
+		$this->view->page_id = '';
 		  
 	} 
 
