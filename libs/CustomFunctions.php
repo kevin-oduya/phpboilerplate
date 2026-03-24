@@ -120,9 +120,14 @@ class CustomFunctions {
         $url = str_replace(' ', '-', $url);
         return preg_replace('/[^A-Za-z0-9\_]/', '', $url);
     }
-    public static function randchars($len) {
+    public static function randchars($len = 8, $password=false) {
         $str = '';
-       $alphabet = "a1AbBcCd2DeEfFg3GhHiIjJ4kKlLm56MnNoOpPqQr7RsStYu8UvVwWxX8yYz0Z";
+       $alphabet = "aAbBcCd2DeEfFg3GhHijJ4kKLm56MnNpPqQr7RsStYu8UvVwWxX8yYzZ";
+       $non_pass_chars = "1IloO0";
+       if (!$alphabet) {
+           $alphabet .= $non_pass_chars;
+       }
+       
        $b = str_split($alphabet);
        shuffle($b);
 
