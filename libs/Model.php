@@ -43,6 +43,16 @@ class Model extends Database {
 		$stmt->execute( $values );
         return $fetchall ? [$stmt->rowCount(), $stmt->fetchAll()] : [$stmt->rowCount(), $stmt->fetch()];
 	}
+	/**
+	 * general query function, not used in the current version but can be used for complex queries that do not fit the other functions
+	 */
+	protected function _query() {
+		$args = func_get_args();
+		$sql = array_shift($args);
+		$stmt = $this->connection()->prepare($sql);
+		$stmt->execute( $args );
+		return [$stmt->rowCount(), $stmt->fetchAll()];
+	}
     /**
      * @return string value of action ie sum of columns
      */
