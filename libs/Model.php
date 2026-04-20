@@ -68,8 +68,13 @@ class Model extends Database {
 	 * @return string json_encoded string
 	 */
 	protected function _insert(string $table, string $columns = '', array $values = [] ):string {
+		$ignore = '';
+	    $exp = explode(':', $table);
+	    if (isset($exp[1])) $ignore = $exp[1];
+	    $table = $exp[0];
+	    
 		$pdo = $this->connection();
-		$sql = "INSERT INTO $table ($columns) VALUES ({$this->_where($columns, ',', '?')}) ";		
+		$sql = "INSERT $ignore INTO $table ($columns) VALUES ({$this->_where($columns, ',', '?')}) ";		
 		//echo $sql;die;
 		$stmt = $pdo->prepare($sql);
 		$eq = ($stmt->execute( $values ));
