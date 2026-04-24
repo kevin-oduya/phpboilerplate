@@ -132,7 +132,7 @@ class CustomFunctions {
        shuffle($b);
 
        for ($i = 1; $i <= $len ; $i++) { 
-           $str .= $b[rand(0, strlen($alphabet) - 1)];
+           $str .= $b[random_int(0, strlen($alphabet) - 1)];
        }
        return $str;
    }
@@ -148,7 +148,7 @@ class CustomFunctions {
     $i = 0; 
     $password = "";    
     while ($i < $length) { 
-        $char = substr($stringFrom, rand(0, strlen($stringFrom) - 1 ), 1);
+        $char = substr($stringFrom, random_int(0, strlen($stringFrom) - 1 ), 1);
         if (!strstr($password, $char)) { 
             $password .= $char;
             $i++;
@@ -450,38 +450,121 @@ class CustomFunctions {
         
         return substr($parts[0], 0, $how_many) . str_repeat('*', strlen($parts[0]) - $how_many) . '@' . $parts[1];
     }
-      public static function headerExtra($pgTitle, $description, $image, $url, $type, $group, $artistname, $publishdate, $datemodified, $article = 'article') {
+    public static function checkbox($name, $value, $label = '', $checked = false) {
+        $isChecked = $checked ? 'checked' : '';
+        return "
+                <label class='form-label block mr-2 mb-3'>$label</label>
+                <label class='switch'>
+                    <input name='$name' value='$value' type='checkbox' $isChecked class='relative  cursor-pointer
+                    transition-colors ease-in-out duration-200  border-2   focus:ring-2 focus:ring-blue-500 focus:outline-none 
+                    focus:ring-opacity-50   ' style='height: 1.25rem; width: 1.25rem;'   />
+                    <span class='slider'></span>
+                </label> 
+                ";
         
-        $req_uri = "https://www.{$_SERVER['REQUEST_URI']}/{$_SERVER['REQUEST_URI']}";
-        $url = str_replace('&', '&amp;', $url); 
-        $image_size_array = getimagesize($image );
-   
-        echo "
-            <meta property='author' content='{$_SERVER['SERVER_NAME']}'>
-            <meta name='description' content=\"$description\">
-            <meta property='og:description' content=\"$description\">
-            <meta property='og:image' content='$image'>
-            <meta property='og:image:width' content=\"{$image_size_array[0]}\">
-            <meta property='og:image:height' content=\"{$image_size_array[1]}\">
-            <meta property='og:title' content=\"$pgTitle\">
-            <meta property='og:site_name' content='{$_SERVER['SERVER_NAME']}'>
-            <meta property='og:url' content='$req_uri'>
-            <meta property='article:published_time' content='$publishdate'>
-        
-            <link rel='canonical'   href='$req_uri'/>
-            <!--link rel='alternate' hreflang='x-default'$req_uri'/>
-            <link rel='alternate' hreflang='en' href='$req_uri'/>
-            <link rel='alternate' hreflang='fr' href='$req_uri'/>-->
-        
-        
-            "; 
-            //<script type="application/ld+json" class="rank-math-schema">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenation.co.za/#organization","name":"The Nation","sameAs":["https://web.facebook.com/thenation24/","https://twitter.com/thenationent"],"logo":{"@type":"ImageObject","@id":"https://thenation.co.za/#logo","url":"https://thenation.co.za/wp-content/uploads/2021/09/20210907_235319.jpg","contentUrl":"https://thenation.co.za/wp-content/uploads/2021/09/20210907_235319.jpg","caption":"The Nation","inLanguage":"en-US","width":"1990","height":"990"}},{"@type":"WebSite","@id":"https://thenation.co.za/#website","url":"https://thenation.co.za","name":"The Nation","publisher":{"@id":"https://thenation.co.za/#organization"},"inLanguage":"en-US"},{"@type":"ImageObject","@id":"https://thenation.co.za/wp-content/uploads/2021/02/20210227_164119.jpg","url":"https://thenation.co.za/wp-content/uploads/2021/02/20210227_164119.jpg","width":"1000","height":"500","caption":"Michelle Botes profile","inLanguage":"en-US"},{"@type":"WebPage","@id":"https://thenation.co.za/bio/michelle-botes-age/#webpage","url":"https://thenation.co.za/bio/michelle-botes-age/","name":"Michelle Botes age, biography, profile, education, husband, recognitions - The Nation","datePublished":"2023-01-25T08:39:56+01:00","dateModified":"2023-01-25T08:39:56+01:00","isPartOf":{"@id":"https://thenation.co.za/#website"},"primaryImageOfPage":{"@id":"https://thenation.co.za/wp-content/uploads/2021/02/20210227_164119.jpg"},"inLanguage":"en-US"},{"@type":"Person","@id":"https://thenation.co.za/bio/michelle-botes-age/#author","name":"Joseph Nkosi","image":{"@type":"ImageObject","@id":"https://secure.gravatar.com/avatar/01684f61d31607aa36bfeebd8fa07b53?s=96&amp;d=mm&amp;r=g","url":"https://secure.gravatar.com/avatar/01684f61d31607aa36bfeebd8fa07b53?s=96&amp;d=mm&amp;r=g","caption":"Joseph Nkosi","inLanguage":"en-US"},"sameAs":["https://thenation.co.za"],"worksFor":{"@id":"https://thenation.co.za/#organization"}},{"@type":"BlogPosting","headline":"Michelle Botes age, biography, profile, education, husband, recognitions - The Nation","keywords":"michelle botes age,michelle botes biography,michelle botes profile,michelle botes husband,michelle botes education","datePublished":"2023-01-25T08:39:56+01:00","dateModified":"2023-01-25T08:39:56+01:00","articleSection":"Biography, South African Celebrities","author":{"@id":"https://thenation.co.za/bio/michelle-botes-age/#author","name":"Joseph Nkosi"},"publisher":{"@id":"https://thenation.co.za/#organization"},"description":"Michelle Botes (born 12 October 1962 in Cape Town) is an award-winning South African actress, language teacher, and aromatherapist. Being able to wear other","name":"Michelle Botes age, biography, profile, education, husband, recognitions - The Nation","@id":"https://thenation.co.za/bio/michelle-botes-age/#richSnippet","isPartOf":{"@id":"https://thenation.co.za/bio/michelle-botes-age/#webpage"},"image":{"@id":"https://thenation.co.za/wp-content/uploads/2021/02/20210227_164119.jpg"},"inLanguage":"en-US","mainEntityOfPage":{"@id":"https://thenation.co.za/bio/michelle-botes-age/#webpage"}}]}</script>
-
-
-            
-            $pgTitle = empty($pgTitle) ?"{$_SERVER['SERVER_NAME']}":$pgTitle; 
-       
     }
+
+    public static function radio($name, $value, $label = '', $checked = false) {
+        $isChecked = $checked ? 'checked' : '';
+        return "
+                <label class='form-label block mr-2 mb-3'>$label</label>
+                <label class='switch'>  
+                    <input name='$name' value='$value' type='radio' $isChecked class='relative  cursor-pointer
+                    transition-colors ease-in-out duration-200  border-2   focus:ring-2 focus:ring-blue-500 focus:outline-none 
+                    focus:ring-opacity-50   ' style='height: 1.25rem; width: 1.25rem;'   />
+                    <span class='slider'></span>
+                </label>
+                ";  
+    }
+
+    public static function cleanInput($data, $type = 'string') {
+        //basic sanitization
+        $data = trim($data);
+
+        //zero is not empty
+        if ($data === '0') return '0';
+        if (empty($data)) return false;
+
+        switch ($type) {
+            case 'email':
+                $data = filter_var($data, FILTER_SANITIZE_EMAIL);
+                return filter_var($data, FILTER_VALIDATE_EMAIL) ? $data: false;
+            case 'int':
+                return filter_var($data, FILTER_VALIDATE_INT);
+            case 'url':
+                $data = filter_var($data, FILTER_SANITIZE_URL);
+                return filter_var($data, FILTER_VALIDATE_URL) ? $data: false;
+            case 'float':
+                return filter_var($data, FILTER_VALIDATE_FLOAT);
+            case 'url':
+                return filter_var($data, FILTER_VALIDATE_URL);
+            case 'string':
+            default:
+                return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+        }
+
+    }
+
+    public static function validateFields($data, $rules) {
+    $errors = [];
+
+    foreach ($rules as $field => $ruleSet) {
+        $value = $data[$field] ?? null;
+        $errorMessage = $ruleSet['error_message'] ?? "Invalid value for $field";
+
+        // Required check (default = required)
+        if (!isset($value)) {
+            $errors[] = "$field is required";
+            continue;
+        }
+
+        // Clean & type validation
+        $type = $ruleSet['type'] ?? 'string';
+        $cleaned = self::cleanInput($value, $type);
+
+        if ($cleaned === false && $cleaned !== '0') {
+            $errors[] = $errorMessage;
+            continue;
+        }
+
+        // Length validation (strings)
+        if ($type === 'string') {
+            if (isset($ruleSet['min_length']) && strlen($cleaned) < $ruleSet['min_length']) {
+                $errors[] = $errorMessage;
+                continue;
+            }
+
+            if (isset($ruleSet['max_length']) && strlen($cleaned) > $ruleSet['max_length']) {
+                $errors[] = $errorMessage;
+                continue;
+            }
+        }
+
+        // Numeric validations
+        if (in_array($type, ['int', 'float'])) {
+            if (isset($ruleSet['min']) && $cleaned < $ruleSet['min']) {
+                $errors[] = $errorMessage;
+                continue;
+            }
+
+            if (isset($ruleSet['max']) && $cleaned > $ruleSet['max']) {
+                $errors[] = $errorMessage;
+                continue;
+            }
+        }
+
+        // Allowed values
+        if (isset($ruleSet['allowed_values']) && !in_array($cleaned, $ruleSet['allowed_values'])) {
+            $errors[] = $errorMessage;
+            continue;
+        }
+
+        // Optional: overwrite with cleaned value
+        $data[$field] = $cleaned;
+    }
+
+    return empty($errors) ? true : $errors;
+}
 
 	 
  
