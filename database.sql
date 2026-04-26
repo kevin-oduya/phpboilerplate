@@ -119,6 +119,7 @@ CREATE TABLE `company` (
   `c_address` varchar(100) DEFAULT NULL,
   `c_icon` varchar(100) DEFAULT NULL,
   `c_logo` varchar(100) DEFAULT NULL,
+  `enable_maintenance_mode` INT(4) DEFAULT 0,
   `c_facebook` varchar(100) DEFAULT NULL,
   `c_youtube` varchar(100) DEFAULT NULL,
   `c_instagram` varchar(100) DEFAULT NULL,
