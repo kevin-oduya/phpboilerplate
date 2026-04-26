@@ -121,7 +121,7 @@ class MyApp_Model extends Model
               
 			//create required inputs
 			$selector = bin2hex(random_bytes(8));
-			$token = rand(1000, 100000); 
+			$token = random_int(1000, 100000); 
 			$url = "https://".$_SERVER['HTTP_HOST']."/account/new-password/?s=" .$selector . "&t=" .bin2hex($token);
 			$expiry = time() + 3600;
 			$hashToken = password_hash($token, PASSWORD_DEFAULT);
