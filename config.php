@@ -17,3 +17,4 @@ define('DBNAME', "myblog");
 define('CODE_VERSION', '1.0.0.0');
 define('SYSTEM', "public/assets/system");
 define('UPLOADS', "public/assets/uploads");
+define('CLASS_NAME', $rui);
