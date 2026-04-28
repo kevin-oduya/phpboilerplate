@@ -124,7 +124,7 @@ class CustomFunctions {
         $str = '';
        $alphabet = "aAbBcCd2DeEfFg3GhHijJ4kKLm56MnNpPqQr7RsStYu8UvVwWxX8yYzZ";
        $non_pass_chars = "1IloO0";
-       if (!$alphabet) {
+       if (!$password) {
            $alphabet .= $non_pass_chars;
        }
        
@@ -224,20 +224,8 @@ class CustomFunctions {
             
         $messages = []; 
         $i = 0;
-        foreach ($email as $rowemail) {    
-            $message = "<section style='background:{$company['c_primary_color']}; padding:15px;'> <center> <img style='max-height:100px;' src='https://{$_SERVER['SERVER_NAME']}/public/assets/uploads/{$company['c_logo']}'> </center> ";
-            $message .= "<div style='background:{$company['c_primary_color']}; position: relative;padding: 0.75rem 1.25rem;margin-bottom: 1rem;border: 1px solid #f3f3f3; border-radius: 0.25rem; color:white'
-            ><div style='margin: 2px; padding: 1px; '> $body1[$i]  <hr> <div style='background:{$company['c_primary_color']}; color:white; padding:3px;'> 
-            <p>{$company['c_name']} <br>{$company['c_address']}<br> {$company['c_email']} <br> {$_SERVER['SERVER_NAME']}</p> </div> </div></div>";
-             
-    	    $message .= "<br><hr><div style='background:{$company['c_primary_color']};color:lightgrey;padding:2px;'>This email was sent to $rowemail.The information in this message is confidential and is intended solely for the addressee. 
-    	    Access to this e-mail by anyone else is unauthorised. If you are not the intended recipient, any disclosure, copying, distribution or any action taken or omitted in 
-    	    reliance on this, is prohibited and may be unlawful. Whilst all reasonable steps are taken to ensure the accuracy and integrity of information and data transmitted 
-    	    electronically and to preserve the confidentiality thereof, no liability or responsibility whatsoever is accepted if information or data is, for whatever reason, 
-    	    corrupted or does not reach its intended destination. </div>";
-    	    $message .= "</section>";
-    	    
-    	    $messages[] = $message;
+        foreach ($email as $rowemail) {     
+    	    $messages[] = $body1[$i];
     	    $i++;
         }
             
@@ -405,7 +393,7 @@ class CustomFunctions {
         $now = new DateTime;
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
-    
+        
         $diff->w = floor($diff->d / 7);
         $diff->d -= $diff->w * 7;
     
@@ -450,15 +438,14 @@ class CustomFunctions {
         
         return substr($parts[0], 0, $how_many) . str_repeat('*', strlen($parts[0]) - $how_many) . '@' . $parts[1];
     }
-    public static function checkbox($name, $value, $label = '', $checked = false) {
+    public static function checkbox($name, $value, $label = '', $checked = false, $auto = '') {
         $isChecked = $checked ? 'checked' : '';
         return "
                 <label class='form-label block mr-2 mb-3'>$label</label>
                 <label class='switch'>
-                    <input name='$name' value='$value' type='checkbox' $isChecked class='relative  cursor-pointer
-                    transition-colors ease-in-out duration-200  border-2   focus:ring-2 focus:ring-blue-500 focus:outline-none 
-                    focus:ring-opacity-50   ' style='height: 1.25rem; width: 1.25rem;'   />
+                    <input name='$name' value='$value' type='checkbox' $isChecked class='$auto' rel='$name'  />
                     <span class='slider'></span>
+                    <span class='$name'></span>
                 </label> 
                 ";
         
@@ -475,6 +462,20 @@ class CustomFunctions {
                     <span class='slider'></span>
                 </label>
                 ";  
+    }
+
+    public static function selectCurrency($currencies, $name = 'base_currency', $tomSelectClass, $placeholder = 'Select base currency', $selected = '') {
+        $rows = "";
+        foreach ($currencies as $currency):
+           $s = $currency['id'] == $selected ? 'selected':'';
+           $rows .="<option value='{$currency['id']}' $s>{$currency['name']} ({$currency['symbol']})</option>";
+        endforeach; 
+
+        return "
+        <select name='$name' id='$name' placeholder='$placeholder' class='$tomSelectClass border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200  focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full'> 
+        <option value='' hidden>$placeholder</option>
+            $rows
+        </select>";
     }
 
     public static function cleanInput($data, $type = 'string') {
@@ -565,7 +566,74 @@ class CustomFunctions {
 
     return empty($errors) ? true : $errors;
 }
+public static function cleanCryptoAmount($amount) {
+    if (strpos($amount, '.') !== false) {
+        $amount = rtrim($amount, '0');
+        $amount = rtrim($amount, '.');
+    }
+    return $amount === '' ? '0' : $amount;
+}
 
+public static function mainTemplate() {
+    return 
+    "
+    <!DOCTYPE html>
+        <html lang='en'>
+        <head>
+            <meta charset='UTF-8' />
+            <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+            <title>Email</title>
+        </head> 
+        <body style='margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif;'>
+            <table width='100%' cellpadding='0' cellspacing='0' style='background-color:#f4f6f8; padding:24px 0;'>
+            <tr>
+                <td align='center'>
+                <!-- Container -->
+                <table
+                    width='100%'
+                    cellpadding='0'
+                    cellspacing='0'
+                    style='max-width:600px; background:#ffffff; border-radius:8px; overflow:hidden;'
+                > 
+                    <!-- Header -->
+                    <tr>
+                    <td style='padding:20px 24px; background:#111827; color:#ffffff;'>
+                        <h1 style='margin:0; font-size:18px; font-weight:600;'>
+                        {{title}}
+                        </h1>
+                    </td>
+                    </tr> 
+                    <!-- Body -->
+                    <tr>
+                    <td style='padding:24px; color:#111827; font-size:14px; line-height:1.6;'>
+                        {{body}}
+                    </td>
+                    </tr> 
+                    <!-- Divider -->
+                    <tr>
+                    <td style='padding:0 24px;'>
+                        <hr style='border:none; border-top:1px solid #e5e7eb;' />
+                    </td>
+                    </tr> 
+                    <!-- Footer -->
+                    <tr>
+                    <td style='padding:16px 24px; font-size:12px; color:#6b7280;'>
+                        <p style='margin:0;'>
+                        © {{year}} {{sitename}}. All rights reserved.
+                        </p>
+                        <p style='margin:8px 0 0;'>
+                        This email was sent automatically. Please do not reply.
+                        </p>
+                    </td>
+                    </tr> 
+                </table>
+                </td>
+            </tr>
+            </table>
+        </body>
+        </html>
+    ";
+}
 	 
  
     
