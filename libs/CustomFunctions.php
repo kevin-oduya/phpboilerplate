@@ -5,6 +5,26 @@ class CustomFunctions {
     
     }
 
+	
+    // prepare a get url, add a _GET without breaking existing ones
+    public static function formatDynamicUrl($key, $value) {
+        //Get the current URI parts
+        $urlParts = parse_url($_SERVER['REQUEST_URI']); 
+        
+        // Parse the existing query string into an array ($params)
+        $params = [];
+        if (isset($urlParts['query'])) {
+            parse_str($urlParts['query'], $params);
+        }
+    
+        // Set or Overwrite the value (prevents ?id=x&id=y)
+        $params[$key] = $value;
+    
+        // Rebuild the query string and the full path
+        $newQuery = http_build_query($params);
+        
+        return $urlParts['path'] . '?' . $newQuery;
+    }
     public static function containsAnyWord(string $sentence, array $words): bool {
         $pattern = '/\b(' . implode('|', array_map('preg_quote', $words)) . ')\b/i';
         return (bool) preg_match($pattern, $sentence);
