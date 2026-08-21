@@ -138,6 +138,7 @@ class App {
 		        if (empty($this->_url[1])) { $this->_error(); return; }
 		         
 		        if (in_array($clean_method, $this->excluded_methods)) { //methods to be exluded from going to index
+					if (!method_exists($this->_controller, $clean_method)) {  $this->_error(); return; }
 			        $this->_controller->{$clean_method}( $this->_url[2]??null, $this->_url[3]??null, $this->_url[4]??null, $this->_url[5]??null );
 			        return;
 		        } 
