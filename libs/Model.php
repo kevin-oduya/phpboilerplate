@@ -32,16 +32,21 @@ class Model extends Database {
 	}  
 	/**
 	 * @return array 0=rowcount, 1=data
-	 */
+	 */ 
 	protected function _get(string $table, string $where = '', array $values = [], bool $fetchall = true, string $orderby = '', string $del_rule = '' ): array {
 		$substr = substr($where, 0, 1);
 		if ($substr == '(') { // the first char is a (
 			$where = $where;
 		} else $where = $this->_where($where, 'and', '', $del_rule);
 
+		$selectTable = "SELECT ";
+		if (substr(trim($table), 0, 1) == '*') {
+			$selectTable .= ltrim($table, '*');
+		} else $selectTable = "SELECT * FROM $table "; 
+
 		$countvalues = count($values);
-		$sql = $countvalues == 0 ? "SELECT * FROM $table $orderby" : "SELECT * FROM $table WHERE $where $orderby";		
-		//echo $sql; //echo '<br>'; //die;
+		$sql = $countvalues == 0 ? "$selectTable $orderby" : "$selectTable WHERE $where $orderby";		
+		//echo $sql; echo '<br>'; //die;
 		$stmt = $this->connection()->prepare($sql);
 		$stmt->execute( $values );
         return $fetchall ? [$stmt->rowCount(), $stmt->fetchAll()] : [$stmt->rowCount(), $stmt->fetch()];
